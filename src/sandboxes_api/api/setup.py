@@ -12,7 +12,7 @@ def _get_fastapi() -> FastAPI:
     api_router = APIRouter()
     api_router.include_router(sandboxes.router, prefix="/sandboxes")
 
-    app.include_router(api_router)
+    app.include_router(api_router, prefix="/api/v1")
 
     return app
 
