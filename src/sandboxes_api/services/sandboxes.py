@@ -16,7 +16,7 @@ class SandboxStatus(StrEnum):
     FAILED = "failed"
 
 
-@dataclass
+@dataclass(frozen=True)
 class Sandbox:
     id: str
     sandbox_type: SandboxType
