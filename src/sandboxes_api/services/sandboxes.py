@@ -56,5 +56,8 @@ def _create_sandbox(sandbox_id: str, sandbox_type: SandboxType) -> None:
 
 
 def _delete_sandbox(sandbox_id: str) -> None:
-    # TODO: Release sandbox in Kubernetes
-    pass
+    if not (agent_sandbox := Singleton.get(AgentSandbox)):
+        raise RuntimeError("Sandbox provider AgentSandbox is not initialized")
+
+    agent_sandbox.release_sandbox(sandbox_id)
+    return sandbox_id
