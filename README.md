@@ -1,5 +1,7 @@
 # Sandboxes API
 
+> Microservice API for managing sandboxes lifecycle
+
 ## Prerequisites
 
 - [uv](https://github.com/astral-sh/uv)
@@ -7,6 +9,7 @@
 ## Setup
 
 1. Install dependencies:
+
    ```bash
    uv sync
    ```
