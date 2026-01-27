@@ -14,3 +14,7 @@ class RunSandboxResponse(BaseModel):
     status: Literal["pending", "running", "completed", "failed"] = Field(
         "pending", description="The status of the sandbox"
     )
+
+
+class DeleteSandboxResponse(BaseModel):
+    sandbox_id: str = Field(..., description="The ID of the deleted sandbox")

@@ -2,7 +2,9 @@ import uuid
 
 from fastapi import APIRouter
 
-from .models import RunSandboxBody, RunSandboxResponse
+from sandboxes_api.services.sandboxes import create_sandbox, delete_sandbox
+
+from .models import RunSandboxBody, RunSandboxResponse, DeleteSandboxResponse
 
 
 router = APIRouter(
@@ -15,15 +17,17 @@ router = APIRouter(
     response_model=RunSandboxResponse,
     status_code=201,
 )
-async def run_sandbox(body: RunSandboxBody):
-    # TODO: Implement sandbox creation logic
-    return RunSandboxResponse(sandbox_id=str(uuid.uuid4()))
+def run_sandbox_request(body: RunSandboxBody):
+    sandbox = create_sandbox(body.sandbox_type)
+    return RunSandboxResponse(sandbox_id=sandbox.id, status=sandbox.status)
 
 
 @router.delete(
     "/{sandbox_id}",
-    status_code=204,
+    response_model=DeleteSandboxResponse,
 )
-async def delete_sandbox(sandbox_id: str):
-    # TODO: Implement sandbox deletion logic
-    return
+def delete_sandbox_request(sandbox_id: str):
+    # TODO: Should return 404 on non-existent sandbox
+
+    deleted_sandbox_id = delete_sandbox(sandbox_id)
+    return DeleteSandboxResponse(sandbox_id=deleted_sandbox_id)
