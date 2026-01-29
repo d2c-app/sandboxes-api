@@ -104,5 +104,3 @@ class AgentSandbox:
         raise RuntimeError(
             f"Watch stream ended without pod '{sandbox_id}' becoming ready"
         )
-
-    # Todo: _expose_service_ports?
