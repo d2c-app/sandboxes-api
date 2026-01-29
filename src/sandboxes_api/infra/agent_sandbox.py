@@ -72,7 +72,6 @@ class AgentSandbox:
             name=sandbox_id,
         )
 
-
     def _wait_for_ready(self, sandbox_id: str) -> client.V1Pod:
         w = watch.Watch()
 
@@ -92,7 +91,8 @@ class AgentSandbox:
                     w.stop()
                     return pod
 
-        raise RuntimeError(f"Watch stream ended without pod '{sandbox_id}' becoming ready")
+        raise RuntimeError(
+            f"Watch stream ended without pod '{sandbox_id}' becoming ready"
+        )
 
-    # Todo: _expose_service_ports? 
-
+    # Todo: _expose_service_ports?
