@@ -38,7 +38,17 @@ class AgentSandbox:
                     "created-at": str(int(time.time())),
                 },
             },
-            "spec": {"sandboxTemplateRef": {"name": template}},
+            "spec": {
+                "sandboxTemplateRef": {"name": template},
+                "networking": {
+                    "service": {
+                        "ports": [
+                            {"name": f"port-{port}", "port": port, "targetPort": port}
+                            for port in expose_ports
+                        ]
+                    }
+                },
+            },
         }
 
         self._custom_api.create_namespaced_custom_object(
