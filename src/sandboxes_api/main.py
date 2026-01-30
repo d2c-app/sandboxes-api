@@ -14,6 +14,7 @@ def setup_infra() -> None:
 
 
 def main() -> None:
+    setup_infra()
     run_api(host=settings().APP_HOST, port=settings().APP_PORT)
 
 
