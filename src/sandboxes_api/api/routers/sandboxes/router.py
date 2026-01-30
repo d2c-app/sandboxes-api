@@ -1,5 +1,3 @@
-import uuid
-
 from fastapi import APIRouter
 
 from sandboxes_api.services.sandboxes import create_sandbox, delete_sandbox

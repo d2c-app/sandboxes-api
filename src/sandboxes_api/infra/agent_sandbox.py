@@ -13,13 +13,17 @@ class SandboxClaim:
 
 
 class AgentSandbox:
+    _config_loaded: bool = False
+
     def __init__(self, namespace: str = "default") -> None:
         self._namespace = namespace
 
-        try:
-            config.load_incluster_config()
-        except config.ConfigException:
-            config.load_kube_config()
+        if not AgentSandbox._config_loaded:
+            try:
+                config.load_incluster_config()
+            except config.ConfigException:
+                config.load_kube_config()
+            AgentSandbox._config_loaded = True
 
         self._custom_api = client.CustomObjectsApi()
         self._v1_api = client.CoreV1Api()

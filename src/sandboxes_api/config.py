@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     APP_HOST: str = "0.0.0.0"
     APP_PORT: int = 8000
 
+    # Background queue settings
+    RQ_REDIS_URL: str = "redis://localhost:6379/0"
+
 
 @lru_cache
 def settings() -> Settings:
