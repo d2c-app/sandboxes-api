@@ -43,7 +43,7 @@ def delete_sandbox(sandbox_id: str) -> str:
 
 def _create_sandbox(sandbox_id: str, sandbox_type: SandboxType) -> None:
     # TODO: Map sandbox type to template type and ports
-    template = "some-template"
+    template = "python-sandbox"
     expose_ports = [5432]
 
     if not (agent_sandbox := Singleton.get(AgentSandbox)):
