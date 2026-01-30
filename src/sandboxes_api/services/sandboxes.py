@@ -1,8 +1,17 @@
+import logging
 from enum import StrEnum
 from dataclasses import dataclass
 import os
 
-from sandboxes_api.infra.agent_sandbox import AgentSandbox
+from sandboxes_api.config import settings
+from sandboxes_api.infra.queue import QueueManager
+from sandboxes_api.services.jobs import create_sandbox_job, delete_sandbox_job
+
+# Initialize QueueManager on module import
+QueueManager.initialize(settings().RQ_REDIS_URL)
+
+
+_logger = logging.getLogger(__name__)
 
 
 class SandboxType(StrEnum):
@@ -25,8 +34,18 @@ class Sandbox:
 def create_sandbox(sandbox_type: SandboxType) -> Sandbox:
     sandbox_id = f"sb-{os.urandom(4).hex()}"
 
-    # TODO: Offload sandbox creation to a background task (use RQ worker or Celery)
-    _create_sandbox(sandbox_id, sandbox_type)
+    # Map sandbox type to template type and ports
+    template = "python-sandbox"
+    expose_ports = [5432]
+
+    _logger.info(
+        "Enqueueing sandbox creation job: sandbox_id=%s, sandbox_type=%s",
+        sandbox_id,
+        sandbox_type,
+    )
+
+    queue = QueueManager.sandbox_lifecycle
+    queue.enqueue(create_sandbox_job, sandbox_id, template, expose_ports)
 
     return Sandbox(
         id=sandbox_id, sandbox_type=sandbox_type, status=SandboxStatus.PENDING
@@ -34,23 +53,9 @@ def create_sandbox(sandbox_type: SandboxType) -> Sandbox:
 
 
 def delete_sandbox(sandbox_id: str) -> str:
-    # TODO: Offload sandbox deletion to a background task
-    _delete_sandbox(sandbox_id)
+    _logger.info("Enqueueing sandbox deletion job: sandbox_id=%s", sandbox_id)
 
-    return sandbox_id
+    queue = QueueManager.sandbox_lifecycle
+    queue.enqueue(delete_sandbox_job, sandbox_id)
 
-
-def _create_sandbox(sandbox_id: str, sandbox_type: SandboxType) -> None:
-    # TODO: Map sandbox type to template type and ports
-    template = "python-sandbox"
-    expose_ports = [5432]
-
-    sandbox_claim = AgentSandbox().claim_sandbox(sandbox_id, template, expose_ports)
-
-    # TODO: Prepare sandbox for use
-    pass
-
-
-def _delete_sandbox(sandbox_id: str) -> None:
-    AgentSandbox().release_sandbox(sandbox_id)
     return sandbox_id
