@@ -1,12 +1,10 @@
-from typing import Literal
-
 from pydantic import BaseModel, Field
 
-from sandboxes_api.services.sandboxes import SandboxStatus
+from sandboxes_api.services.sandboxes import SandboxStatus, SandboxType
 
 
 class RunSandboxBody(BaseModel):
-    sandbox_type: Literal["postgres",] = Field(
+    sandbox_type: SandboxType = Field(
         ..., description="The type of sandbox to run"
     )
 
