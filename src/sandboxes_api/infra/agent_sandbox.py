@@ -1,6 +1,6 @@
 import time
 from typing import Any, Dict, cast
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from kubernetes import client, config, watch
 
 
@@ -9,7 +9,6 @@ class SandboxClaim:
     id: str
     template: str
     hostname: str
-    exposed_ports: list[int] = field(default_factory=list)
 
 
 class AgentSandbox:
@@ -28,9 +27,7 @@ class AgentSandbox:
         self._custom_api = client.CustomObjectsApi()
         self._v1_api = client.CoreV1Api()
 
-    def claim_sandbox(
-        self, sandbox_id: str, template: str, expose_ports: list[int]
-    ) -> SandboxClaim:
+    def claim_sandbox(self, sandbox_id: str, template: str) -> SandboxClaim:
         claim_manifest = {
             "apiVersion": "extensions.agents.x-k8s.io/v1alpha1",
             "kind": "SandboxClaim",
@@ -44,14 +41,6 @@ class AgentSandbox:
             },
             "spec": {
                 "sandboxTemplateRef": {"name": template},
-                "networking": {
-                    "service": {
-                        "ports": [
-                            {"name": f"port-{port}", "port": port, "targetPort": port}
-                            for port in expose_ports
-                        ]
-                    }
-                },
             },
         }
 
@@ -71,7 +60,6 @@ class AgentSandbox:
             id=sandbox_id,
             template=template,
             hostname=hostname,
-            exposed_ports=expose_ports,
         )
 
         return claim

@@ -6,21 +6,20 @@ from sandboxes_api.infra.agent_sandbox import AgentSandbox
 _logger = logging.getLogger(__name__)
 
 
-def create_sandbox_job(sandbox_id: str, template: str, expose_ports: list[int]) -> None:
+def create_sandbox_job(sandbox_id: str, template: str) -> None:
     """
     Background job to create a sandbox.
 
     Args:
         sandbox_id: Unique identifier for the sandbox
         template: Template name for the sandbox
-        expose_ports: List of ports to expose
     """
     _logger.info(
         "Starting sandbox creation: sandbox_id=%s, template=%s", sandbox_id, template
     )
 
     try:
-        sandbox_claim = AgentSandbox().claim_sandbox(sandbox_id, template, expose_ports)
+        sandbox_claim = AgentSandbox().claim_sandbox(sandbox_id, template)
 
         _logger.info(
             "Sandbox created successfully: sandbox_id=%s, hostname=%s, template=%s",

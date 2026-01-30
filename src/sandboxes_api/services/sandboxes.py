@@ -18,6 +18,11 @@ class SandboxType(StrEnum):
     POSTGRES = "postgres"
 
 
+_TYPE_TO_TEMPLATE = {
+    SandboxType.POSTGRES: "postgres-16-alpine-template",
+}
+
+
 class SandboxStatus(StrEnum):
     PENDING = "pending"
     RUNNING = "running"
@@ -34,9 +39,8 @@ class Sandbox:
 def create_sandbox(sandbox_type: SandboxType) -> Sandbox:
     sandbox_id = f"sb-{os.urandom(4).hex()}"
 
-    # Map sandbox type to template type and ports
-    template = "python-sandbox"
-    expose_ports = [5432]
+    if not (template := _TYPE_TO_TEMPLATE.get(sandbox_type)):
+        raise ValueError(f"Invalid sandbox type: {sandbox_type}")
 
     _logger.info(
         "Enqueueing sandbox creation job: sandbox_id=%s, sandbox_type=%s",
@@ -45,7 +49,7 @@ def create_sandbox(sandbox_type: SandboxType) -> Sandbox:
     )
 
     queue = QueueManager.sandbox_lifecycle
-    queue.enqueue(create_sandbox_job, sandbox_id, template, expose_ports)
+    queue.enqueue(create_sandbox_job, sandbox_id, template)
 
     return Sandbox(
         id=sandbox_id, sandbox_type=sandbox_type, status=SandboxStatus.PENDING
