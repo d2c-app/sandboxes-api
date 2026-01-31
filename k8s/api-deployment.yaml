@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sandboxes-api
+  labels:
+    app: sandboxes-api
+    component: api
+spec:
+  replicas: 1  # Easily scalable - change this value to scale
+  selector:
+    matchLabels:
+      app: sandboxes-api
+      component: api
+  template:
+    metadata:
+      labels:
+        app: sandboxes-api
+        component: api
+    spec:
+      serviceAccountName: sandboxes-api
+      containers:
+      - name: api
+        image: sandboxes-api:latest  # Update with your registry/image name
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: sandboxes-api-config
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /docs  # FastAPI built-in endpoint
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /docs  # FastAPI built-in endpoint
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
