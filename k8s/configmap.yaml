@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sandboxes-api-config
+  labels:
+    app: sandboxes-api
+data:
+  LOG_LEVEL: "INFO"
+  APP_HOST: "0.0.0.0"
+  APP_PORT: "8000"
+  RQ_REDIS_URL: "redis://redis-service:6379/0"

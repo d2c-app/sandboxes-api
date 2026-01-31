@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sandboxes-api-role
+  labels:
+    app: sandboxes-api
+rules:
+# Permissions to manage SandboxClaim custom resources
+- apiGroups:
+  - "extensions.agents.x-k8s.io"
+  resources:
+  - sandboxclaims
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - delete
+# Permissions to watch pods (needed for _wait_for_ready)
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch

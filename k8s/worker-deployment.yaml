@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sandboxes-worker
+  labels:
+    app: sandboxes-api
+    component: worker
+spec:
+  replicas: 1  # Easily scalable - change this value to scale
+  selector:
+    matchLabels:
+      app: sandboxes-api
+      component: worker
+  template:
+    metadata:
+      labels:
+        app: sandboxes-api
+        component: worker
+    spec:
+      serviceAccountName: sandboxes-api
+      containers:
+      - name: worker
+        image: sandboxes-worker:latest  # Update with your registry/image name
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: sandboxes-api-config
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        # Worker doesn't expose HTTP ports, so no liveness/readiness probes
+        # Consider adding a startup probe if the worker takes time to initialize

@@ -1,0 +1,49 @@
+# Virtual environment - should be created in the container
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files (may contain secrets)
+.env
+.env.local
+
+# Git
+.git/
+.gitignore
+
+# Docker
+docker/
+Dockerfile*
+.dockerignore
+
+# Documentation
+*.md
+!README.md
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
