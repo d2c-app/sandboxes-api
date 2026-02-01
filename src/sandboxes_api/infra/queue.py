@@ -18,7 +18,7 @@ class QueueManager:
     sandbox_lifecycle: Optional[Queue] = None
 
     @classmethod
-    def initialize(cls, redis_url: str) -> None:
+    def init(cls, redis_url: str) -> None:
         """
         Initialize QueueManager with Redis connection and create static queues.
 

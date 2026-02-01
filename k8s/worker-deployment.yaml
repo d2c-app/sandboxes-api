@@ -21,7 +21,7 @@ spec:
       containers:
       - name: worker
         image: sandboxes-worker:latest  # Update with your registry/image name
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: sandboxes-api-config
