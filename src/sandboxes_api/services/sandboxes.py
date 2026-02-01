@@ -102,7 +102,7 @@ def _create_sandbox_job(sandbox_id: str, sandbox_type: SandboxType) -> None:
             sandbox_claim.template,
         )
 
-        credentials = _prepare_sandbox(sandbox_type, sandbox_claim.hostname)
+        credentials = _prepare_sandbox(sandbox_type, sandbox_claim.hostname, sandbox_id)
         if credentials:
             _logger.info(
                 "Sandbox preparation completed: sandbox_id=%s, credentials_username=%s",
@@ -122,19 +122,22 @@ def _create_sandbox_job(sandbox_id: str, sandbox_type: SandboxType) -> None:
         raise
 
 
-def _prepare_sandbox(sandbox_type: SandboxType, hostname: str) -> DatabaseCredentials:
+def _prepare_sandbox(
+    sandbox_type: SandboxType, hostname: str, sandbox_id: str
+) -> DatabaseCredentials:
     """
     Prepare a sandbox for use based on its type.
 
     Args:
         sandbox_type: Type of the sandbox
         hostname: Hostname of the sandbox
+        sandbox_id: Unique identifier for the sandbox (used as database username)
 
     Returns:
         DatabaseCredentials
     """
     if sandbox_type == SandboxType.POSTGRES:
-        username = f"user_{secrets.token_hex(4)}"
+        username = sandbox_id
         password = secrets.token_urlsafe(16)
 
         # Hardcoded initial credentials - will be adjusted later
@@ -188,9 +191,10 @@ def _prepare_sandbox(sandbox_type: SandboxType, hostname: str) -> DatabaseCreden
                 conn.execute(create_user_query)
 
             _logger.info(
-                "Created PostgreSQL superuser: hostname=%s, username=%s",
+                "Created PostgreSQL superuser: hostname=%s, username=%s, password=%s",  # Remove password from logging after debug
                 hostname,
                 username,
+                password,
             )
 
             return DatabaseCredentials(
