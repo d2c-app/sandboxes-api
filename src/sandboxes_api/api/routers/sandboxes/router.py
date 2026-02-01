@@ -27,5 +27,7 @@ def run_sandbox_request(body: RunSandboxBody):
 def delete_sandbox_request(sandbox_id: str):
     # TODO: Should return 404 on non-existent sandbox
 
+    # Strip whitespace to prevent issues with trailing spaces
+    sandbox_id = sandbox_id.strip()
     deleted_sandbox_id = delete_sandbox(sandbox_id)
     return DeleteSandboxResponse(sandbox_id=deleted_sandbox_id)
