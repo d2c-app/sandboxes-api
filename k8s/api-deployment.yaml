@@ -21,7 +21,7 @@ spec:
       containers:
       - name: api
         image: sandboxes-api:latest  # Update with your registry/image name
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
           name: http

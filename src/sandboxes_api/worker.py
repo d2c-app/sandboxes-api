@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 def main() -> None:
     """Main entry point for RQ worker."""
 
-    QueueManager.initialize(settings().RQ_REDIS_URL)
+    QueueManager.init(settings().RQ_REDIS_URL)
 
     queue = QueueManager.sandbox_lifecycle
 

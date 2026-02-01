@@ -55,7 +55,9 @@ class AgentSandbox:
 
         pod = self._wait_for_ready(sandbox_id)
 
-        hostname = pod.status.pod_ip if pod.status else ""
+        # Use pod name as hostname (includes pod ID, works within same namespace)
+        # Format: <pod-name> which resolves to the pod's IP via Kubernetes DNS
+        hostname = pod.metadata.name
 
         claim = SandboxClaim(
             id=sandbox_id,
