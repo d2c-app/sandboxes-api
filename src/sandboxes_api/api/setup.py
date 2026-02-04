@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter
 import uvicorn
 
-from .routers import sandboxes
+from .routers import misc, sandboxes
 
 
 def _get_fastapi() -> FastAPI:
@@ -9,6 +9,8 @@ def _get_fastapi() -> FastAPI:
         title="Sandboxes API",
         description="Microservice API for managing sandboxes lifecycle",
     )
+    app.include_router(misc.router)
+
     api_router = APIRouter()
     api_router.include_router(sandboxes.router, prefix="/sandboxes")
 
