@@ -16,7 +16,7 @@ router = APIRouter(
     status_code=201,
 )
 def run_sandbox_request(body: RunSandboxBody):
-    sandbox = create_sandbox(body.sandbox_type)
+    sandbox = create_sandbox(body.sandbox_type, callback_url=body.callback_url)
     return RunSandboxResponse(sandbox_id=sandbox.id, status=sandbox.status)
 
 

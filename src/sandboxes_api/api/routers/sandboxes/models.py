@@ -5,6 +5,10 @@ from sandboxes_api.services.sandboxes import SandboxStatus, SandboxType
 
 class RunSandboxBody(BaseModel):
     sandbox_type: SandboxType = Field(..., description="The type of sandbox to run")
+    callback_url: str | None = Field(
+        None,
+        description="Optional callback URL to receive sandbox creation notification",
+    )
 
 
 class RunSandboxResponse(BaseModel):
