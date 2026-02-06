@@ -1,5 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from sandboxes_api.api.dependencies.auth import verify_auth_key
 from sandboxes_api.services.sandboxes import create_sandbox, delete_sandbox
 
 from .models import RunSandboxBody, RunSandboxResponse, DeleteSandboxResponse
@@ -7,6 +8,7 @@ from .models import RunSandboxBody, RunSandboxResponse, DeleteSandboxResponse
 
 router = APIRouter(
     tags=["Sandbox Lifecycle"],
+    dependencies=[Depends(verify_auth_key)],
 )
 
 

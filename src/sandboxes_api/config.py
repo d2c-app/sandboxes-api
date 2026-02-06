@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     # Background queue settings
     RQ_REDIS_URL: str = "redis://localhost:6379/0"
 
+    AUTH_KEY: str
+
 
 @lru_cache
 def settings() -> Settings:
