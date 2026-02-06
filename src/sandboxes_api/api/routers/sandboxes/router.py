@@ -18,6 +18,15 @@ router = APIRouter(
     status_code=201,
 )
 def run_sandbox_request(body: RunSandboxBody):
+    """
+    Create a new sandbox environment.
+
+    This endpoint initiates the provisioning of a secure sandbox environment based on the specified type.
+    The process is asynchronous; initial status is returned immediately.
+
+    - **sandbox_type**: Type of the sandbox to create.
+    - **callback_url**: (Optional) URL to receive status updates.
+    """
     sandbox = create_sandbox(body.sandbox_type, callback_url=body.callback_url)
     return RunSandboxResponse(sandbox_id=sandbox.id, status=sandbox.status)
 
@@ -27,6 +36,14 @@ def run_sandbox_request(body: RunSandboxBody):
     response_model=DeleteSandboxResponse,
 )
 def delete_sandbox_request(sandbox_id: str):
+    """
+    Terminate a sandbox instance.
+
+    This endpoint requests the termination and deletion of an active sandbox identified by its ID.
+    Resources associated with the sandbox will be released.
+
+    - **sandbox_id**: Unique identifier of the sandbox to delete.
+    """
     # Strip whitespace to prevent issues with trailing spaces
     sandbox_id = sandbox_id.strip()
     deleted_sandbox_id = delete_sandbox(sandbox_id)
