@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import os
 import secrets
 
+import httpx
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
 
@@ -46,20 +47,23 @@ class DatabaseCredentials:
     database: str = "postgres"
 
 
-def create_sandbox(sandbox_type: SandboxType) -> Sandbox:
+def create_sandbox(
+    sandbox_type: SandboxType, callback_url: str | None = None
+) -> Sandbox:
     sandbox_id = f"sb-{os.urandom(4).hex()}"
 
     if not (template := _TYPE_TO_TEMPLATE.get(sandbox_type)):
         raise ValueError(f"Invalid sandbox type: {sandbox_type}")
 
     _logger.info(
-        "Enqueueing sandbox creation job: sandbox_id=%s, sandbox_type=%s",
+        "Enqueueing sandbox creation job: sandbox_id=%s, sandbox_type=%s, callback_url=%s",
         sandbox_id,
         sandbox_type,
+        callback_url,
     )
 
     queue = QueueManager.sandbox_lifecycle
-    queue.enqueue(_create_sandbox_job, sandbox_id, sandbox_type)
+    queue.enqueue(_create_sandbox_job, sandbox_id, sandbox_type, callback_url)
 
     return Sandbox(
         id=sandbox_id, sandbox_type=sandbox_type, status=SandboxStatus.PENDING
@@ -75,22 +79,29 @@ def delete_sandbox(sandbox_id: str) -> str:
     return sandbox_id
 
 
-def _create_sandbox_job(sandbox_id: str, sandbox_type: SandboxType) -> None:
+def _create_sandbox_job(
+    sandbox_id: str, sandbox_type: SandboxType, callback_url: str | None = None
+) -> None:
     """
     Background job to create a sandbox.
 
     Args:
         sandbox_id: Unique identifier for the sandbox
         sandbox_type: Type of the sandbox
+        callback_url: Optional URL to receive sandbox creation notification
     """
     if not (template := _TYPE_TO_TEMPLATE.get(sandbox_type)):
         raise ValueError(f"Invalid sandbox type: {sandbox_type}")
 
     _logger.info(
-        "Starting sandbox creation: sandbox_id=%s, sandbox_type=%s",
+        "Starting sandbox creation: sandbox_id=%s, sandbox_type=%s, callback_url=%s",
         sandbox_id,
         sandbox_type,
+        callback_url,
     )
+
+    credentials: DatabaseCredentials | None = None
+    status = SandboxStatus.FAILED
 
     try:
         sandbox_claim = AgentSandbox().claim_sandbox(sandbox_id, template)
@@ -109,6 +120,7 @@ def _create_sandbox_job(sandbox_id: str, sandbox_type: SandboxType) -> None:
                 sandbox_id,
                 credentials.username,
             )
+            status = SandboxStatus.RUNNING
 
     except Exception as e:
         _logger.error(
@@ -120,6 +132,12 @@ def _create_sandbox_job(sandbox_id: str, sandbox_type: SandboxType) -> None:
             exc_info=True,
         )
         raise
+    finally:
+        # Send callback if URL is provided
+        if callback_url:
+            _send_callback(
+                callback_url, sandbox_id, sandbox_type, credentials, status=status
+            )
 
 
 def _prepare_sandbox(
@@ -213,6 +231,76 @@ def _prepare_sandbox(
                 exc_info=True,
             )
             raise
+
+
+def _send_callback(
+    callback_url: str,
+    sandbox_id: str,
+    sandbox_type: SandboxType,
+    credentials: DatabaseCredentials | None,
+    status: SandboxStatus,
+) -> None:
+    """
+    Send a POST request to the callback URL with sandbox information.
+
+    Args:
+        callback_url: URL to send the callback to
+        sandbox_id: Unique identifier for the sandbox
+        sandbox_type: Type of the sandbox
+        credentials: Database credentials for the sandbox (None if status is FAILED)
+        status: Status of the sandbox creation (SandboxStatus.RUNNING or SandboxStatus.FAILED)
+    """
+    try:
+        # Prepare callback payload based on sandbox type and status
+        if status == SandboxStatus.RUNNING and credentials:
+            if sandbox_type == SandboxType.POSTGRES:
+                payload = {
+                    "sandbox_id": sandbox_id,
+                    "status": status.value,
+                    "credentials": {
+                        "user": credentials.username,
+                        "password": credentials.password,
+                    },
+                }
+            else:
+                raise NotImplementedError(
+                    f"Callback not implemented for sandbox type: {sandbox_type}"
+                )
+        else:
+            # Failure case - no credentials
+            payload = {
+                "sandbox_id": sandbox_id,
+                "status": status.value,
+                "credentials": {},
+            }
+
+        _logger.info(
+            "Sending callback: callback_url=%s, sandbox_id=%s",
+            callback_url,
+            sandbox_id,
+        )
+
+        with httpx.Client(timeout=30.0) as client:
+            response = client.post(callback_url, json=payload)
+            response.raise_for_status()
+
+        _logger.info(
+            "Callback sent successfully: callback_url=%s, sandbox_id=%s, status_code=%d",
+            callback_url,
+            sandbox_id,
+            response.status_code,
+        )
+
+    except Exception as e:
+        _logger.error(
+            "Failed to send callback: callback_url=%s, sandbox_id=%s, error=%s: %s",
+            callback_url,
+            sandbox_id,
+            type(e).__name__,
+            str(e),
+            exc_info=True,
+        )
+        # Don't raise - callback failure shouldn't fail sandbox creation
 
 
 def _delete_sandbox_job(sandbox_id: str) -> None:
