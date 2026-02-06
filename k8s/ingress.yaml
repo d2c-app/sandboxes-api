@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sandboxes-api-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: sandboxes-api-ip
+    networking.gke.io/managed-certificates: sandboxes-api-cert
+spec:
+  defaultBackend:
+    service:
+      name: sandboxes-api-service
+      port:
+        number: 80
+  ingressClassName: "gce"
+  rules:
+  - host: sandboxes.dev2.cloud
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sandboxes-api-service
+            port:
+              number: 80
