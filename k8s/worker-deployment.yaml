@@ -20,11 +20,13 @@ spec:
       serviceAccountName: sandboxes-api
       containers:
       - name: worker
-        image: sandboxes-worker:latest  # Update with your registry/image name
+        image: us-central1-docker.pkg.dev/imgstorage-1/d2c-images/sandboxes-worker:latest
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: sandboxes-api-config
+        - secretRef:
+            name: sandboxes-api-secrets
         resources:
           requests:
             memory: "128Mi"
