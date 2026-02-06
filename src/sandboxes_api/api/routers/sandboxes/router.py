@@ -16,7 +16,7 @@ router = APIRouter(
     status_code=201,
 )
 def run_sandbox_request(body: RunSandboxBody):
-    sandbox = create_sandbox(body.sandbox_type)
+    sandbox = create_sandbox(body.sandbox_type, callback_url=body.callback_url)
     return RunSandboxResponse(sandbox_id=sandbox.id, status=sandbox.status)
 
 
@@ -25,8 +25,6 @@ def run_sandbox_request(body: RunSandboxBody):
     response_model=DeleteSandboxResponse,
 )
 def delete_sandbox_request(sandbox_id: str):
-    # TODO: Should return 404 on non-existent sandbox
-
     # Strip whitespace to prevent issues with trailing spaces
     sandbox_id = sandbox_id.strip()
     deleted_sandbox_id = delete_sandbox(sandbox_id)
