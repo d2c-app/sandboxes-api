@@ -20,7 +20,7 @@ spec:
       serviceAccountName: sandboxes-api
       containers:
       - name: api
-        image: sandboxes-api:latest  # Update with your registry/image name
+        image: us-central1-docker.pkg.dev/imgstorage-1/d2c-images/sandboxes-api:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
@@ -29,6 +29,8 @@ spec:
         envFrom:
         - configMapRef:
             name: sandboxes-api-config
+        - secretRef:
+            name: sandboxes-api-secrets
         resources:
           requests:
             memory: "128Mi"
@@ -38,7 +40,7 @@ spec:
             cpu: "500m"
         livenessProbe:
           httpGet:
-            path: /docs  # FastAPI built-in endpoint
+            path: /healthz
             port: 8000
           initialDelaySeconds: 30
           periodSeconds: 10
@@ -46,7 +48,7 @@ spec:
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /docs  # FastAPI built-in endpoint
+            path: /healthz
             port: 8000
           initialDelaySeconds: 10
           periodSeconds: 5
