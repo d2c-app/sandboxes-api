@@ -23,11 +23,17 @@ def run_sandbox_request(body: RunSandboxBody):
 
     This endpoint initiates the provisioning of a secure sandbox environment based on the specified type.
     The process is asynchronous; initial status is returned immediately.
+    For extra security, a verification string can be provided and will be included in the callback body.
 
     - **sandbox_type**: Type of the sandbox to create.
     - **callback_url**: (Optional) URL to receive status updates.
+    - **callback_verification**: (Optional) Verification string included in the callback body for extra security. Max 256 characters.
     """
-    sandbox = create_sandbox(body.sandbox_type, callback_url=body.callback_url)
+    sandbox = create_sandbox(
+        body.sandbox_type,
+        callback_url=body.callback_url,
+        callback_verification=body.callback_verification,
+    )
     return RunSandboxResponse(sandbox_id=sandbox.id, status=sandbox.status)
 
 

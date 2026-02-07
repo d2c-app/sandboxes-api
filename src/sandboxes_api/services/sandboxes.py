@@ -48,7 +48,9 @@ class DatabaseCredentials:
 
 
 def create_sandbox(
-    sandbox_type: SandboxType, callback_url: str | None = None
+    sandbox_type: SandboxType,
+    callback_url: str | None = None,
+    callback_verification: str | None = None,
 ) -> Sandbox:
     sandbox_id = f"sb-{os.urandom(4).hex()}"
 
@@ -63,7 +65,13 @@ def create_sandbox(
     )
 
     queue = QueueManager.sandbox_lifecycle
-    queue.enqueue(_create_sandbox_job, sandbox_id, sandbox_type, callback_url)
+    queue.enqueue(
+        _create_sandbox_job,
+        sandbox_id,
+        sandbox_type,
+        callback_url,
+        callback_verification,
+    )
 
     return Sandbox(
         id=sandbox_id, sandbox_type=sandbox_type, status=SandboxStatus.PENDING
@@ -80,7 +88,10 @@ def delete_sandbox(sandbox_id: str) -> str:
 
 
 def _create_sandbox_job(
-    sandbox_id: str, sandbox_type: SandboxType, callback_url: str | None = None
+    sandbox_id: str,
+    sandbox_type: SandboxType,
+    callback_url: str | None = None,
+    callback_verification: str | None = None,
 ) -> None:
     """
     Background job to create a sandbox.
@@ -89,6 +100,7 @@ def _create_sandbox_job(
         sandbox_id: Unique identifier for the sandbox
         sandbox_type: Type of the sandbox
         callback_url: Optional URL to receive sandbox creation notification
+        callback_verification: Optional verification string included in the callback body
     """
     if not (template := _TYPE_TO_TEMPLATE.get(sandbox_type)):
         raise ValueError(f"Invalid sandbox type: {sandbox_type}")
@@ -136,7 +148,12 @@ def _create_sandbox_job(
         # Send callback if URL is provided
         if callback_url:
             _send_callback(
-                callback_url, sandbox_id, sandbox_type, credentials, status=status
+                callback_url,
+                sandbox_id,
+                sandbox_type,
+                credentials,
+                status=status,
+                verification=callback_verification,
             )
 
 
@@ -239,6 +256,7 @@ def _send_callback(
     sandbox_type: SandboxType,
     credentials: DatabaseCredentials | None,
     status: SandboxStatus,
+    verification: str | None = None,
 ) -> None:
     """
     Send a POST request to the callback URL with sandbox information.
@@ -249,6 +267,7 @@ def _send_callback(
         sandbox_type: Type of the sandbox
         credentials: Database credentials for the sandbox (None if status is FAILED)
         status: Status of the sandbox creation (SandboxStatus.RUNNING or SandboxStatus.FAILED)
+        verification: Optional verification string for the receiver to authenticate the source
     """
     try:
         # Prepare callback payload based on sandbox type and status
@@ -273,6 +292,9 @@ def _send_callback(
                 "status": status.value,
                 "credentials": {},
             }
+
+        if verification is not None:
+            payload["verification"] = verification
 
         _logger.info(
             "Sending callback: callback_url=%s, sandbox_id=%s",

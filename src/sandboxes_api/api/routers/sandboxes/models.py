@@ -9,6 +9,11 @@ class RunSandboxBody(BaseModel):
         None,
         description="Optional callback URL to receive sandbox creation notification",
     )
+    callback_verification: str | None = Field(
+        None,
+        max_length=256,
+        description="Optional verification string included in the callback body so the receiver can authenticate the source",
+    )
 
 
 class RunSandboxResponse(BaseModel):
