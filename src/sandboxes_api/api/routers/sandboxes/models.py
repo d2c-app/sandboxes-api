@@ -18,6 +18,7 @@ class RunSandboxBody(BaseModel):
 
 class RunSandboxResponse(BaseModel):
     sandbox_id: str = Field(..., description="The ID of the sandbox")
+    sandbox_type: SandboxType = Field(..., description="The type of sandbox")
     status: SandboxStatus = Field(
         SandboxStatus.PENDING, description="The status of the sandbox"
     )

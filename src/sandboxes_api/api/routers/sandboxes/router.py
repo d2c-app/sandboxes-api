@@ -34,7 +34,9 @@ def run_sandbox_request(body: RunSandboxBody):
         callback_url=body.callback_url,
         callback_verification=body.callback_verification,
     )
-    return RunSandboxResponse(sandbox_id=sandbox.id, status=sandbox.status)
+    return RunSandboxResponse(
+        sandbox_id=sandbox.id, sandbox_type=sandbox.sandbox_type, status=sandbox.status
+    )
 
 
 @router.delete(
