@@ -1,8 +1,11 @@
+import logging
 import time
 from typing import Any, Dict, cast
 from dataclasses import dataclass
 
 from kubernetes import client, config, watch
+
+_logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -26,7 +29,6 @@ class AgentSandbox:
             AgentSandbox._config_loaded = True
 
         self._custom_api = client.CustomObjectsApi()
-        self._v1_api = client.CoreV1Api()
 
     def claim_sandbox(self, sandbox_id: str, template: str) -> SandboxClaim:
         claim_manifest = {
@@ -53,11 +55,11 @@ class AgentSandbox:
             body=claim_manifest,
         )
 
-        pod = self._wait_for_ready(sandbox_id)
+        self._wait_for_ready(sandbox_id)
 
-        # Use pod name as hostname (includes pod ID, works within same namespace)
-        # Format: <pod-name> which resolves to the pod's IP via Kubernetes DNS
-        hostname = pod.metadata.name
+        # The Sandbox controller creates a Service named after the sandbox ID,
+        # so use it as the hostname (DNS-resolvable within the cluster).
+        hostname = sandbox_id
 
         claim = SandboxClaim(
             id=sandbox_id,
@@ -77,25 +79,29 @@ class AgentSandbox:
             name=sandbox_id,
         )
 
-    def _wait_for_ready(self, sandbox_id: str) -> client.V1Pod:
+    def _wait_for_ready(self, sandbox_id: str) -> None:
+        """Wait for the SandboxClaim to become Ready."""
         w = watch.Watch()
 
         for event in w.stream(
-            self._v1_api.list_namespaced_pod,
+            self._custom_api.list_namespaced_custom_object,
+            group="extensions.agents.x-k8s.io",
+            version="v1alpha1",
             namespace=self._namespace,
+            plural="sandboxclaims",
             field_selector=f"metadata.name={sandbox_id}",
         ):
-            pod = cast(client.V1Pod, cast(Dict[str, Any], event)["object"])
+            claim = cast(Dict[str, Any], event)["object"]
+            conditions = claim.get("status", {}).get("conditions", [])
 
-            if pod.status and pod.status.phase == "Running":
-                conditions = pod.status.conditions or []
-                is_ready = any(
-                    c.type == "Ready" and c.status == "True" for c in conditions
-                )
-                if is_ready:
-                    w.stop()
-                    return pod
+            is_ready = any(
+                c.get("type") == "Ready" and c.get("status") == "True"
+                for c in conditions
+            )
+            if is_ready:
+                w.stop()
+                return
 
         raise RuntimeError(
-            f"Watch stream ended without pod '{sandbox_id}' becoming ready"
+            f"Watch stream ended without sandbox claim '{sandbox_id}' becoming ready"
         )
