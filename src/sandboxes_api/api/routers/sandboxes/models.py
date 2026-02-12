@@ -9,10 +9,10 @@ class RunSandboxBody(BaseModel):
         None,
         description="Optional callback URL to receive sandbox creation notification",
     )
-    callback_verification: str | None = Field(
+    callback_secret: str | None = Field(
         None,
         max_length=256,
-        description="Optional verification string included in the callback body so the receiver can authenticate the source",
+        description="Secret used to sign callback payloads with HMAC-SHA256 (required when callback_url is provided)",
     )
 
 

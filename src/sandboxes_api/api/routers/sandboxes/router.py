@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from sandboxes_api.api.dependencies.auth import verify_auth_key
 from sandboxes_api.services.sandboxes import create_sandbox, delete_sandbox
@@ -23,16 +23,23 @@ def run_sandbox_request(body: RunSandboxBody):
 
     This endpoint initiates the provisioning of a secure sandbox environment based on the specified type.
     The process is asynchronous; initial status is returned immediately.
-    For extra security, a verification string can be provided and will be included in the callback body.
+    For extra security, a callback secret can be provided and will be used to sign callbacks with HMAC-SHA256.
+    Signed callbacks include `X-Sandbox-Timestamp` and `X-Sandbox-Signature` headers.
 
     - **sandbox_type**: Type of the sandbox to create.
     - **callback_url**: (Optional) URL to receive status updates.
-    - **callback_verification**: (Optional) Verification string included in the callback body for extra security. Max 256 characters.
+    - **callback_secret**: Secret used to sign callback payloads with HMAC-SHA256. Required when callback_url is provided. Max 256 characters.
     """
+    if body.callback_url and not body.callback_secret:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="callback_secret is required when callback_url is provided",
+        )
+
     sandbox = create_sandbox(
         body.sandbox_type,
         callback_url=body.callback_url,
-        callback_verification=body.callback_verification,
+        callback_secret=body.callback_secret,
     )
     return RunSandboxResponse(
         sandbox_id=sandbox.id, sandbox_type=sandbox.sandbox_type, status=sandbox.status
