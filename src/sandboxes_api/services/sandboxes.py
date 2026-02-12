@@ -296,7 +296,9 @@ def _send_callback(
                 "credentials": {},
             }
 
-        body = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode("utf-8")
+        body = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode(
+            "utf-8"
+        )
         headers = {"Content-Type": "application/json"}
 
         if callback_secret:
