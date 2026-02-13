@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 
 from sandboxes_api.api.dependencies.auth import verify_auth_key
 from sandboxes_api.services.sandboxes import create_sandbox, delete_sandbox
@@ -28,14 +28,8 @@ def run_sandbox_request(body: RunSandboxBody):
 
     - **sandbox_type**: Type of the sandbox to create.
     - **callback_url**: (Optional) URL to receive status updates.
-    - **callback_secret**: Secret used to sign callback payloads with HMAC-SHA256. Required when callback_url is provided. Max 256 characters.
+    - **callback_secret**: (Optional) Secret used to sign callback payloads with HMAC-SHA256. Max 256 characters.
     """
-    if body.callback_url and not body.callback_secret:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="callback_secret is required when callback_url is provided",
-        )
-
     sandbox = create_sandbox(
         body.sandbox_type,
         callback_url=body.callback_url,
