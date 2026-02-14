@@ -1,5 +1,6 @@
 import logging
 import time
+from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, cast
 from dataclasses import dataclass
 
@@ -18,6 +19,8 @@ class SandboxClaim:
 class AgentSandbox:
     _config_loaded: bool = False
 
+    _SHUTDOWN_GRACE_PERIOD_SECONDS = 10
+
     def __init__(self, namespace: str = "default") -> None:
         self._namespace = namespace
 
@@ -30,7 +33,22 @@ class AgentSandbox:
 
         self._custom_api = client.CustomObjectsApi()
 
-    def claim_sandbox(self, sandbox_id: str, template: str) -> SandboxClaim:
+    def claim_sandbox(
+        self, sandbox_id: str, template: str, ttl_seconds: int | None = None
+    ) -> SandboxClaim:
+        spec: Dict[str, Any] = {
+            "sandboxTemplateRef": {"name": template},
+        }
+
+        if ttl_seconds is not None:
+            shutdown_time = datetime.now(timezone.utc) + timedelta(
+                seconds=ttl_seconds + self._SHUTDOWN_GRACE_PERIOD_SECONDS
+            )
+            spec["lifecycle"] = {
+                "shutdownPolicy": "Delete",
+                "shutdownTime": shutdown_time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
+
         claim_manifest = {
             "apiVersion": "extensions.agents.x-k8s.io/v1alpha1",
             "kind": "SandboxClaim",
@@ -42,9 +60,7 @@ class AgentSandbox:
                     "created-at": str(int(time.time())),
                 },
             },
-            "spec": {
-                "sandboxTemplateRef": {"name": template},
-            },
+            "spec": spec,
         }
 
         self._custom_api.create_namespaced_custom_object(
