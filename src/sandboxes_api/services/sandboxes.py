@@ -4,6 +4,9 @@ from enum import StrEnum
 from dataclasses import dataclass
 import os
 import secrets
+import hashlib
+import hmac
+import json
 
 import httpx
 from sqlalchemy import create_engine, text
@@ -51,7 +54,7 @@ def create_sandbox(
     sandbox_type: SandboxType,
     ttl_seconds: int | None = None,
     callback_url: str | None = None,
-    callback_verification: str | None = None,
+    callback_secret: str | None = None,
 ) -> Sandbox:
     sandbox_id = f"sb-{os.urandom(4).hex()}"
 
@@ -73,7 +76,7 @@ def create_sandbox(
         sandbox_type,
         ttl_seconds,
         callback_url,
-        callback_verification,
+        callback_secret,
     )
 
     return Sandbox(
@@ -95,7 +98,7 @@ def _create_sandbox_job(
     sandbox_type: SandboxType,
     ttl_seconds: int | None = None,
     callback_url: str | None = None,
-    callback_verification: str | None = None,
+    callback_secret: str | None = None,
 ) -> None:
     """
     Background job to create a sandbox.
@@ -105,7 +108,7 @@ def _create_sandbox_job(
         sandbox_type: Type of the sandbox
         ttl_seconds: Optional time-to-live in seconds; shutdown time is computed at claim creation
         callback_url: Optional URL to receive sandbox creation notification
-        callback_verification: Optional verification string included in the callback body
+        callback_secret: Optional secret used to sign callbacks with HMAC-SHA256
     """
     if not (template := _TYPE_TO_TEMPLATE.get(sandbox_type)):
         raise ValueError(f"Invalid sandbox type: {sandbox_type}")
@@ -161,7 +164,7 @@ def _create_sandbox_job(
                 sandbox_type,
                 credentials,
                 status=status,
-                verification=callback_verification,
+                callback_secret=callback_secret,
             )
 
 
@@ -264,7 +267,7 @@ def _send_callback(
     sandbox_type: SandboxType,
     credentials: DatabaseCredentials | None,
     status: SandboxStatus,
-    verification: str | None = None,
+    callback_secret: str | None = None,
 ) -> None:
     """
     Send a POST request to the callback URL with sandbox information.
@@ -275,7 +278,7 @@ def _send_callback(
         sandbox_type: Type of the sandbox
         credentials: Database credentials for the sandbox (None if status is FAILED)
         status: Status of the sandbox creation (SandboxStatus.RUNNING or SandboxStatus.FAILED)
-        verification: Optional verification string for the receiver to authenticate the source
+        callback_secret: Optional secret used to sign callback payload with HMAC-SHA256
     """
     try:
         # Prepare callback payload based on sandbox type and status
@@ -301,8 +304,21 @@ def _send_callback(
                 "credentials": {},
             }
 
-        if verification is not None:
-            payload["verification"] = verification
+        body = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode(
+            "utf-8"
+        )
+        headers = {"Content-Type": "application/json"}
+
+        if callback_secret:
+            timestamp = str(int(time.time()))
+            signed_payload = timestamp.encode("utf-8") + b"." + body
+            signature = hmac.new(
+                callback_secret.encode("utf-8"),
+                signed_payload,
+                hashlib.sha256,
+            ).hexdigest()
+            headers["X-Sandbox-Timestamp"] = timestamp
+            headers["X-Sandbox-Signature"] = f"sha256={signature}"
 
         _logger.info(
             "Sending callback: callback_url=%s, sandbox_id=%s",
@@ -311,7 +327,7 @@ def _send_callback(
         )
 
         with httpx.Client(timeout=30.0) as client:
-            response = client.post(callback_url, json=payload)
+            response = client.post(callback_url, content=body, headers=headers)
             response.raise_for_status()
 
         _logger.info(
