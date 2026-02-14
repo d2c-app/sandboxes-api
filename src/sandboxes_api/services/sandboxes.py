@@ -49,6 +49,7 @@ class DatabaseCredentials:
 
 def create_sandbox(
     sandbox_type: SandboxType,
+    ttl_seconds: int | None = None,
     callback_url: str | None = None,
     callback_verification: str | None = None,
 ) -> Sandbox:
@@ -58,9 +59,10 @@ def create_sandbox(
         raise ValueError(f"Invalid sandbox type: {sandbox_type}")
 
     _logger.info(
-        "Enqueueing sandbox creation job: sandbox_id=%s, sandbox_type=%s, callback_url=%s",
+        "Enqueueing sandbox creation job: sandbox_id=%s, sandbox_type=%s, ttl_seconds=%s, callback_url=%s",
         sandbox_id,
         sandbox_type,
+        ttl_seconds,
         callback_url,
     )
 
@@ -69,6 +71,7 @@ def create_sandbox(
         _create_sandbox_job,
         sandbox_id,
         sandbox_type,
+        ttl_seconds,
         callback_url,
         callback_verification,
     )
@@ -90,6 +93,7 @@ def delete_sandbox(sandbox_id: str) -> str:
 def _create_sandbox_job(
     sandbox_id: str,
     sandbox_type: SandboxType,
+    ttl_seconds: int | None = None,
     callback_url: str | None = None,
     callback_verification: str | None = None,
 ) -> None:
@@ -99,6 +103,7 @@ def _create_sandbox_job(
     Args:
         sandbox_id: Unique identifier for the sandbox
         sandbox_type: Type of the sandbox
+        ttl_seconds: Optional time-to-live in seconds; shutdown time is computed at claim creation
         callback_url: Optional URL to receive sandbox creation notification
         callback_verification: Optional verification string included in the callback body
     """
@@ -106,9 +111,10 @@ def _create_sandbox_job(
         raise ValueError(f"Invalid sandbox type: {sandbox_type}")
 
     _logger.info(
-        "Starting sandbox creation: sandbox_id=%s, sandbox_type=%s, callback_url=%s",
+        "Starting sandbox creation: sandbox_id=%s, sandbox_type=%s, ttl_seconds=%s, callback_url=%s",
         sandbox_id,
         sandbox_type,
+        ttl_seconds,
         callback_url,
     )
 
@@ -116,7 +122,9 @@ def _create_sandbox_job(
     status = SandboxStatus.FAILED
 
     try:
-        sandbox_claim = AgentSandbox().claim_sandbox(sandbox_id, template)
+        sandbox_claim = AgentSandbox().claim_sandbox(
+            sandbox_id, template, ttl_seconds=ttl_seconds
+        )
 
         _logger.info(
             "Sandbox created successfully: sandbox_id=%s, hostname=%s, template=%s",

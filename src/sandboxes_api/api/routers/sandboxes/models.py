@@ -5,6 +5,11 @@ from sandboxes_api.services.sandboxes import SandboxStatus, SandboxType
 
 class RunSandboxBody(BaseModel):
     sandbox_type: SandboxType = Field(..., description="The type of sandbox to run")
+    ttl_seconds: int | None = Field(
+        None,
+        gt=0,
+        description="Optional time-to-live in seconds for the sandbox. When set, the sandbox will be automatically shut down after this duration (counted from sandbox creation, not request time). A 10-second grace period is added internally.",
+    )
     callback_url: str | None = Field(
         None,
         description="Optional callback URL to receive sandbox creation notification",

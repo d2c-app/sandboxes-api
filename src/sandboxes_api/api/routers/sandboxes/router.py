@@ -26,11 +26,13 @@ def run_sandbox_request(body: RunSandboxBody):
     For extra security, a verification string can be provided and will be included in the callback body.
 
     - **sandbox_type**: Type of the sandbox to create.
+    - **ttl_seconds**: (Optional) Time-to-live in seconds. The sandbox will be automatically deleted after this duration.
     - **callback_url**: (Optional) URL to receive status updates.
     - **callback_verification**: (Optional) Verification string included in the callback body for extra security. Max 256 characters.
     """
     sandbox = create_sandbox(
         body.sandbox_type,
+        ttl_seconds=body.ttl_seconds,
         callback_url=body.callback_url,
         callback_verification=body.callback_verification,
     )
