@@ -21,10 +21,12 @@ _logger = logging.getLogger(__name__)
 
 class SandboxType(StrEnum):
     POSTGRES = "postgres"
+    REDIS = "redis"
 
 
 _TYPE_TO_TEMPLATE = {
     SandboxType.POSTGRES: "postgres-16-alpine-template",
+    SandboxType.REDIS: "redis-alpine-template",
 }
 
 
@@ -48,6 +50,14 @@ class DatabaseCredentials:
     hostname: str
     port: int = 5432
     database: str = "postgres"
+
+
+@dataclass(frozen=True)
+class RedisCredentials:
+    username: str
+    password: str
+    hostname: str
+    port: int = 6379
 
 
 def create_sandbox(
@@ -121,7 +131,7 @@ def _create_sandbox_job(
         callback_url,
     )
 
-    credentials: DatabaseCredentials | None = None
+    credentials: DatabaseCredentials | RedisCredentials | None = None
     status = SandboxStatus.FAILED
 
     try:
@@ -170,7 +180,7 @@ def _create_sandbox_job(
 
 def _prepare_sandbox(
     sandbox_type: SandboxType, hostname: str, sandbox_id: str
-) -> DatabaseCredentials:
+) -> DatabaseCredentials | RedisCredentials:
     """
     Prepare a sandbox for use based on its type.
 
@@ -260,12 +270,17 @@ def _prepare_sandbox(
             )
             raise
 
+    if sandbox_type == SandboxType.REDIS:
+        raise NotImplementedError("Redis sandbox preparation not yet implemented")
+
+    raise ValueError(f"Unknown sandbox type: {sandbox_type}")
+
 
 def _send_callback(
     callback_url: str,
     sandbox_id: str,
     sandbox_type: SandboxType,
-    credentials: DatabaseCredentials | None,
+    credentials: DatabaseCredentials | RedisCredentials | None,
     status: SandboxStatus,
     callback_secret: str | None = None,
 ) -> None:
@@ -292,6 +307,8 @@ def _send_callback(
                         "password": credentials.password,
                     },
                 }
+            elif sandbox_type == SandboxType.REDIS:
+                raise NotImplementedError("Redis callback payload not yet implemented")
             else:
                 raise NotImplementedError(
                     f"Callback not implemented for sandbox type: {sandbox_type}"
