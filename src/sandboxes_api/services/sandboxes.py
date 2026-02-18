@@ -9,6 +9,7 @@ import hmac
 import json
 
 import httpx
+import redis as redis_lib
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
 
@@ -21,10 +22,12 @@ _logger = logging.getLogger(__name__)
 
 class SandboxType(StrEnum):
     POSTGRES = "postgres"
+    REDIS = "redis"
 
 
 _TYPE_TO_TEMPLATE = {
     SandboxType.POSTGRES: "postgres-16-alpine-template",
+    SandboxType.REDIS: "redis-7-alpine-template",
 }
 
 
@@ -48,6 +51,14 @@ class DatabaseCredentials:
     hostname: str
     port: int = 5432
     database: str = "postgres"
+
+
+@dataclass(frozen=True)
+class RedisCredentials:
+    username: str
+    password: str
+    hostname: str
+    port: int = 6379
 
 
 def create_sandbox(
@@ -121,7 +132,7 @@ def _create_sandbox_job(
         callback_url,
     )
 
-    credentials: DatabaseCredentials | None = None
+    credentials: DatabaseCredentials | RedisCredentials | None = None
     status = SandboxStatus.FAILED
 
     try:
@@ -170,7 +181,7 @@ def _create_sandbox_job(
 
 def _prepare_sandbox(
     sandbox_type: SandboxType, hostname: str, sandbox_id: str
-) -> DatabaseCredentials:
+) -> DatabaseCredentials | RedisCredentials:
     """
     Prepare a sandbox for use based on its type.
 
@@ -260,12 +271,83 @@ def _prepare_sandbox(
             )
             raise
 
+    if sandbox_type == SandboxType.REDIS:
+        username = sandbox_id
+        password = secrets.token_urlsafe(16)
+
+        max_retries = 10
+        retry_delay = 2  # seconds
+        client = None
+
+        for attempt in range(max_retries):
+            try:
+                client = redis_lib.Redis(
+                    host=hostname, port=6379, socket_connect_timeout=5
+                )
+                client.ping()
+                break
+            except (redis_lib.ConnectionError, redis_lib.TimeoutError):
+                if attempt < max_retries - 1:
+                    _logger.debug(
+                        "Redis not ready yet (attempt %d/%d): hostname=%s, waiting %ds...",
+                        attempt + 1,
+                        max_retries,
+                        hostname,
+                        retry_delay,
+                    )
+                    time.sleep(retry_delay)
+                    retry_delay = min(retry_delay * 1.5, 10)
+                else:
+                    raise
+
+        if client is None:
+            raise RuntimeError("Failed to connect to Redis after retries")
+
+        try:
+            client.execute_command(
+                "ACL",
+                "SETUSER",
+                username,
+                "on",
+                f">{password}",
+                "~*",
+                "&*",
+                "+@all",
+            )
+
+            _logger.info(
+                "Created Redis user: hostname=%s, username=%s, password=%s",
+                hostname,
+                username,
+                password,
+            )
+
+            return RedisCredentials(
+                username=username,
+                password=password,
+                hostname=hostname,
+                port=6379,
+            )
+        except Exception as e:
+            _logger.error(
+                "Failed to prepare Redis sandbox: hostname=%s, error=%s: %s",
+                hostname,
+                type(e).__name__,
+                str(e),
+                exc_info=True,
+            )
+            raise
+        finally:
+            client.close()
+
+    raise ValueError(f"Unknown sandbox type: {sandbox_type}")
+
 
 def _send_callback(
     callback_url: str,
     sandbox_id: str,
     sandbox_type: SandboxType,
-    credentials: DatabaseCredentials | None,
+    credentials: DatabaseCredentials | RedisCredentials | None,
     status: SandboxStatus,
     callback_secret: str | None = None,
 ) -> None:
@@ -284,6 +366,15 @@ def _send_callback(
         # Prepare callback payload based on sandbox type and status
         if status == SandboxStatus.RUNNING and credentials:
             if sandbox_type == SandboxType.POSTGRES:
+                payload = {
+                    "sandbox_id": sandbox_id,
+                    "status": status.value,
+                    "credentials": {
+                        "user": credentials.username,
+                        "password": credentials.password,
+                    },
+                }
+            elif sandbox_type == SandboxType.REDIS:
                 payload = {
                     "sandbox_id": sandbox_id,
                     "status": status.value,
