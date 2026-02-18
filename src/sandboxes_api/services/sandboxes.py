@@ -363,34 +363,23 @@ def _send_callback(
         callback_secret: Optional secret used to sign callback payload with HMAC-SHA256
     """
     try:
-        # Prepare callback payload based on sandbox type and status
         if status == SandboxStatus.RUNNING and credentials:
+            payload = {
+                "sandbox_id": sandbox_id,
+                "sandbox_type": sandbox_type.value,
+                "status": status.value,
+                "credentials": {
+                    "user": credentials.username,
+                    "password": credentials.password,
+                },
+            }
             if sandbox_type == SandboxType.POSTGRES:
-                payload = {
-                    "sandbox_id": sandbox_id,
-                    "status": status.value,
-                    "credentials": {
-                        "user": credentials.username,
-                        "password": credentials.password,
-                    },
-                }
-            elif sandbox_type == SandboxType.REDIS:
-                payload = {
-                    "sandbox_id": sandbox_id,
-                    "status": status.value,
-                    "credentials": {
-                        "user": credentials.username,
-                        "password": credentials.password,
-                    },
-                }
-            else:
-                raise NotImplementedError(
-                    f"Callback not implemented for sandbox type: {sandbox_type}"
-                )
+                payload["database"] = credentials.database
         else:
             # Failure case - no credentials
             payload = {
                 "sandbox_id": sandbox_id,
+                "sandbox_type": sandbox_type.value,
                 "status": status.value,
                 "credentials": {},
             }
