@@ -1,0 +1,1063 @@
+addonsConfig:
+  dnsCacheConfig:
+    enabled: true
+  gcePersistentDiskCsiDriverConfig:
+    enabled: true
+  gcpFilestoreCsiDriverConfig:
+    enabled: true
+  gcsFuseCsiDriverConfig:
+    enabled: true
+  gkeBackupAgentConfig: {}
+  httpLoadBalancing: {}
+  kubernetesDashboard:
+    disabled: true
+  networkPolicyConfig:
+    disabled: true
+  parallelstoreCsiDriverConfig:
+    enabled: true
+  rayOperatorConfig: {}
+  statefulHaConfig:
+    enabled: true
+anonymousAuthenticationConfig:
+  mode: ENABLED
+authenticatorGroupsConfig: {}
+autopilot:
+  enabled: true
+autoscaling:
+  autoprovisioningNodePoolDefaults:
+    imageType: COS_CONTAINERD
+    management:
+      autoRepair: true
+      autoUpgrade: true
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    serviceAccount: default
+    upgradeSettings:
+      maxSurge: 1
+      strategy: SURGE
+  autoscalingProfile: OPTIMIZE_UTILIZATION
+  enableNodeAutoprovisioning: true
+  resourceLimits:
+  - maximum: '1000000000'
+    resourceType: cpu
+  - maximum: '1000000000'
+    resourceType: memory
+  - maximum: '1000000000'
+    resourceType: nvidia-tesla-t4
+  - maximum: '1000000000'
+    resourceType: nvidia-tesla-a100
+binaryAuthorization:
+  evaluationMode: DISABLED
+clusterIpv4Cidr: 10.94.0.0/17
+controlPlaneEndpointsConfig:
+  dnsEndpointConfig:
+    allowExternalTraffic: true
+    enableK8sCertsViaDns: false
+    enableK8sTokensViaDns: false
+    endpoint: gke-4060e71826d2416f97763e14c6b1dc91adda-1079775410075.us-central1.gke.goog
+  ipEndpointsConfig:
+    authorizedNetworksConfig:
+      gcpPublicCidrsAccessEnabled: false
+      privateEndpointEnforcementEnabled: false
+    enablePublicEndpoint: true
+    enabled: true
+    privateEndpoint: 10.128.0.4
+    publicEndpoint: 34.134.100.6
+createTime: '2026-02-01T19:03:13+00:00'
+currentMasterVersion: 1.33.5-gke.2228001
+currentNodeCount: 5
+currentNodeVersion: 1.33.5-gke.2228001
+databaseEncryption:
+  currentState: CURRENT_STATE_DECRYPTED
+  state: DECRYPTED
+defaultMaxPodsConstraint:
+  maxPodsPerNode: '110'
+endpoint: 34.134.100.6
+enterpriseConfig:
+  clusterTier: STANDARD
+etag: 3da982f8-efe9-435b-8c46-f3be21a3c23a
+id: 4060e71826d2416f97763e14c6b1dc91adda13cdff6b46c88df1f7e93d02826b
+initialClusterVersion: 1.33.5-gke.2118001
+instanceGroupUrls:
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-default-pool-b0815958-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-1-62715a3d-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-1-cd80459f-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-1-d663d045-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-1-5d57b263-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-2-84d96b4b-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-2-34ba065c-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-2-359f443f-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-2-97d11a6a-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-3-7ed072c8-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-3-de0cddbb-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-3-2739fb5b-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-3-f3dcbabd-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-4-402b9a5a-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-4-5b998d38-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-4-1bdd8707-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-4-b38d75a2-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-5-abc8da2c-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-5-e7e80ffe-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-5-9c366a09-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-5-20b5fd1f-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-6-5cc02178-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-6-03080c5d-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-6-0bcf5810-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-6-08384866-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-7-4bb00f7d-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-7-113b010b-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-7-f78ca3fe-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-7-2116d668-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-8-fb0db072-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-8-013d2211-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-8-914c5720-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-8-3739aa31-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-9-a943c618-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-9-edd70913-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-9-9fe47825-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-9-7a1c0e92-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-nap-nb7nlhl5-491ad815-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-nap-nb7nlhl5-d36cc4b9-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-nap-nb7nlhl5-51e780a1-grp
+- https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-nap-nb7nlhl5-602aee2a-grp
+ipAllocationPolicy:
+  clusterIpv4Cidr: 10.94.0.0/17
+  clusterIpv4CidrBlock: 10.94.0.0/17
+  clusterSecondaryRangeName: gke-d2c-cluster-pods-4060e718
+  defaultPodIpv4RangeUtilization: 0.0137
+  networkTierConfig:
+    networkTier: NETWORK_TIER_DEFAULT
+  podCidrOverprovisionConfig: {}
+  servicesIpv4Cidr: 34.118.224.0/20
+  servicesIpv4CidrBlock: 34.118.224.0/20
+  stackType: IPV4
+  useIpAliases: true
+labelFingerprint: a9dc16a7
+legacyAbac: {}
+location: us-central1
+locations:
+- us-central1-f
+- us-central1-a
+- us-central1-b
+- us-central1-c
+loggingConfig:
+  componentConfig:
+    enableComponents:
+    - SYSTEM_COMPONENTS
+    - WORKLOADS
+loggingService: logging.googleapis.com/kubernetes
+maintenancePolicy:
+  resourceVersion: e3b0c442
+masterAuth:
+  clientCertificateConfig: {}
+  clusterCaCertificate: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVMVENDQXBXZ0F3SUJBZ0lSQUlXZVYrNmNIemdSeHRTZFBWbFk1cm93RFFZSktvWklodmNOQVFFTEJRQXcKTHpFdE1Dc0dBMVVFQXhNa1lqYzRZemMwWXpBdE5HSTBNeTAwTVdJd0xXRTVZekV0WlRSa056STRNVGd4TXpWbApNQ0FYRFRJMk1ESXdNVEU0TURNeE5Wb1lEekl3TlRZd01USTFNVGt3TXpFMVdqQXZNUzB3S3dZRFZRUURFeVJpCk56aGpOelJqTUMwMFlqUXpMVFF4WWpBdFlUbGpNUzFsTkdRM01qZ3hPREV6TldVd2dnR2lNQTBHQ1NxR1NJYjMKRFFFQkFRVUFBNElCandBd2dnR0tBb0lCZ1FET1VId1BGdkhzMElTQ1VPWFM4dzhWN2tnTStNVkxCanpaUGYxegphSzZJUitDNW02UFhKQk5vSnZnYWNnVWo0dGFtQXF3dEtHbnBUWjMwL1lucDRTK0M4UXdmRzFqbUxES2F1bmZ0CldKekh5OFN1UmdPTHU1cWliU1BnSDZkRmljMzBlZjdZQ0hLcm1IR1RBZ2FxdFM4aUhUSGRDK05oUmRnenUzZTkKSnVyaDJseGZwNXoyYmd0OTNwSUNwd2piRmxLc3NydFdJWmpCZTZwZTNpMFByNGROWmRyR3ByaWQxWENEaTc2RQpXbmxCWHZERms5QWxIUTMyODV1U1pFRlhBVldlTTFSUjBZRGlTcUxXcWJYWkZpSHg4Zkh3QUU5bUZzZHIzR0NCCnNVSXJTeUNHa3h1bFBudG51ZnNQY2JiQlVuTUtQcjViYnRUd2Z5czJYTEdhSTdXYTlsVVFpYjNYK2taOS9yRk8Ka3pNQkpEWlZpZUxaRW9uTkRic2U1eUFzOHBWNkExQVA4STNITDhoUHU5RDBlUkY5T3B5VU9mNlNOOThlUWpvZApzOEZkakpvOFlFUHRxVHZBeTVrY2VQMWJWdVBxbWVGcGtVY2F4ZHBmVFZLbUNhOC94RGVpMXB5MSt5VHVQK2FWClVtUnQyY0dEek0ybmJ1OTRGUFVvSmZhODdvMENBd0VBQWFOQ01FQXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1BOEcKQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQW5RWkFlS0szeXpleVJpaHhLVmcxekNEamltTUEwRwpDU3FHU0liM0RRRUJDd1VBQTRJQmdRQmJhWVBQb255ejV0alRyN01UQlh1UTVjRTJ4V1F6enpPSVRZd3J1dm9iCmxnUEhISVEweDBSZGV5U2JGWHNqeitESkRTcW9OWkRLRzRDUkkvYnZxVkUrL0lNN09GcUVhamJ3S0d1elN4QVQKZ1orYlBHK081NEtzWmVDTDBYRVVLKzZmTDE1bXNmYTBFS1YraGRoWGZDcC9UTFZEQ3FSK2U5NzBXaFRtRi9TMApxNVRMYThxU3MxRklOVWNCYmVCN2c5WDJmWWlQQVBhWkxHL0tJQkg0YUxBOHA5Nit4bUQzWUgxSk9VUFJPcktSCkJDeUpFczdlZ1dSdFBxcUM0QmdlTWYyN1ZtTm5GeW1sVDAyWGJDSGptYjNRWDNSaERvUVl5WGltT3hKYmZRZDMKN0ZyVHZtdkUzLzNhMVVHck01RzNwR0hnTnRzRHNFWmN2WFl2Vi9wcjM1N1BWYnBBVjU2QnBhdDlUaEllc21nWApwWkRCSUYydW1SNkw5L050YUk0Nk1rcVlnbExYaWVZWkJhVGVPWHRrNWl5RWEySEkwbmJ2UkJiM25JWUtsaDZXCndpNFBrRjFpZ2VWUWRjVDBPSXRIeVcxVWJWckZRZnNrSk5PRlBLRCtLbDg4VHFzaXhIWDF3YjJiNms0WUM2SG0KZ0VSOTd0NHZ2VTgwL2hKblN5Mkh2dVk9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+masterAuthorizedNetworksConfig:
+  gcpPublicCidrsAccessEnabled: false
+  privateEndpointEnforcementEnabled: false
+monitoringConfig:
+  advancedDatapathObservabilityConfig:
+    enableMetrics: true
+    enableRelay: true
+  componentConfig:
+    enableComponents:
+    - SYSTEM_COMPONENTS
+    - STORAGE
+    - POD
+    - DEPLOYMENT
+    - STATEFULSET
+    - DAEMONSET
+    - HPA
+    - JOBSET
+    - CADVISOR
+    - KUBELET
+    - DCGM
+  managedPrometheusConfig:
+    enabled: true
+monitoringService: monitoring.googleapis.com/kubernetes
+name: d2c-cluster
+network: default
+networkConfig:
+  datapathProvider: ADVANCED_DATAPATH
+  defaultEnablePrivateNodes: false
+  defaultSnatStatus: {}
+  disableL4LbFirewallReconciliation: false
+  dnsConfig:
+    clusterDns: CLOUD_DNS
+    clusterDnsDomain: cluster.local
+    clusterDnsScope: CLUSTER_SCOPE
+  enableFqdnNetworkPolicy: false
+  enableIntraNodeVisibility: true
+  gatewayApiConfig:
+    channel: CHANNEL_STANDARD
+  inTransitEncryptionConfig: IN_TRANSIT_ENCRYPTION_DISABLED
+  network: projects/imgstorage-1/global/networks/default
+  serviceExternalIpsConfig: {}
+  subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+nodeConfig:
+  bootDisk:
+    diskType: pd-balanced
+    sizeGb: '100'
+  diskSizeGb: 100
+  diskType: pd-balanced
+  effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+  gvnic:
+    enabled: true
+  imageType: COS_CONTAINERD
+  kubeletConfig:
+    insecureKubeletReadonlyPortEnabled: false
+    maxParallelImagePulls: 2
+  machineType: ek-standard-8
+  metadata:
+    disable-legacy-endpoints: 'true'
+  oauthScopes:
+  - https://www.googleapis.com/auth/devstorage.read_only
+  - https://www.googleapis.com/auth/logging.write
+  - https://www.googleapis.com/auth/monitoring
+  - https://www.googleapis.com/auth/service.management.readonly
+  - https://www.googleapis.com/auth/servicecontrol
+  - https://www.googleapis.com/auth/trace.append
+  reservationAffinity:
+    consumeReservationType: NO_RESERVATION
+  resourceLabels:
+    goog-gke-node-pool-provisioning-model: on-demand
+  serviceAccount: default
+  shieldedInstanceConfig:
+    enableIntegrityMonitoring: true
+    enableSecureBoot: true
+  taints:
+  - effect: NO_SCHEDULE
+    key: cloud.google.com/gke-quick-remove
+    value: 'true'
+  windowsNodeConfig: {}
+  workloadMetadataConfig:
+    mode: GKE_METADATA
+nodePoolAutoConfig:
+  nodeKubeletConfig:
+    insecureKubeletReadonlyPortEnabled: false
+nodePoolDefaults:
+  nodeConfigDefaults:
+    gcfsConfig:
+      enabled: true
+    loggingConfig:
+      variantConfig:
+        variant: DEFAULT
+    nodeKubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+nodePools:
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: ek-standard-8
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    taints:
+    - effect: NO_SCHEDULE
+      key: cloud.google.com/gke-quick-remove
+      value: 'true'
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 83f81896-963c-4525-812d-c080835cfff5
+  initialNodeCount: 1
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-default-pool-b0815958-grp
+  locations:
+  - us-central1-a
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: default-pool
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/default-pool
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: ek-standard-8
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 7d08f267-be76-4f1e-a41a-0b44b8b3be58
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-1-62715a3d-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-1-cd80459f-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-1-d663d045-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-1-5d57b263-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-1
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-1
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: ek-standard-16
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 3b86666c-9ec4-45b4-a4cc-5599773779ce
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-2-84d96b4b-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-2-34ba065c-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-2-359f443f-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-2-97d11a6a-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-2
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-2
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: ek-standard-32
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 3b209f54-8079-4738-a08e-e6846f08b0a6
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-3-7ed072c8-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-3-de0cddbb-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-3-2739fb5b-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-3-f3dcbabd-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-3
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-3
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: e2-medium
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 2e3c0a48-7721-4579-a8a2-3acbb1b8df70
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-4-402b9a5a-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-4-5b998d38-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-4-1bdd8707-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-4-b38d75a2-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-4
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-4
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: e2-standard-2
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 9d206ae6-35c9-4c00-b768-6e3bedc85596
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-5-abc8da2c-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-5-e7e80ffe-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-5-9c366a09-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-5-20b5fd1f-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-5
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-5
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: e2-standard-4
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: cf166c8a-818e-427f-a0f4-7e1651b3c767
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-6-5cc02178-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-6-03080c5d-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-6-0bcf5810-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-6-08384866-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-6
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-6
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: e2-standard-8
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: d49b56ad-3901-41cb-bffd-4d3de530ed67
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-7-4bb00f7d-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-7-113b010b-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-7-f78ca3fe-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-7-2116d668-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-7
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-7
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: e2-standard-16
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: ef808a81-1251-4792-b896-90a3f9985043
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-8-fb0db072-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-8-013d2211-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-8-914c5720-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-8-3739aa31-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-8
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-8
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '100'
+    diskSizeGb: 100
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    machineType: e2-standard-32
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 41cd29d5-8ce3-4c90-b340-335415e3a489
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-pool-9-a943c618-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-pool-9-edd70913-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-pool-9-9fe47825-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-pool-9-7a1c0e92-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '32'
+  name: pool-9
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  podIpv4CidrSize: 26
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/pool-9
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+- autoscaling:
+    autoprovisioned: true
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 1000
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '116'
+    diskSizeGb: 116
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    gvnic:
+      enabled: true
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 2
+    labels:
+      sandbox.gke.io/runtime: gvisor
+    machineType: ek-standard-16
+    metadata:
+      disable-legacy-endpoints: 'true'
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    reservationAffinity:
+      consumeReservationType: NO_RESERVATION
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    sandboxConfig:
+      type: GVISOR
+    serviceAccount: default
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    taints:
+    - effect: NO_SCHEDULE
+      key: sandbox.gke.io/runtime
+      value: gvisor
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 1c2e18c2-8279-4590-a700-7a51dfb3bd73
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-f/instanceGroupManagers/gk3-d2c-cluster-nap-nb7nlhl5-491ad815-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-a/instanceGroupManagers/gk3-d2c-cluster-nap-nb7nlhl5-d36cc4b9-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-b/instanceGroupManagers/gk3-d2c-cluster-nap-nb7nlhl5-51e780a1-grp
+  - https://www.googleapis.com/compute/v1/projects/imgstorage-1/zones/us-central1-c/instanceGroupManagers/gk3-d2c-cluster-nap-nb7nlhl5-602aee2a-grp
+  locations:
+  - us-central1-f
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '64'
+  name: nap-nb7nlhl5
+  networkConfig:
+    enablePrivateNodes: false
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.94.0.0/17
+    podIpv4RangeUtilization: 0.0137
+    podRange: gke-d2c-cluster-pods-4060e718
+    subnetwork: projects/imgstorage-1/regions/us-central1/subnetworks/default
+  placementPolicy: {}
+  podIpv4CidrSize: 25
+  selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster/nodePools/nap-nb7nlhl5
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.33.5-gke.2228001
+notificationConfig:
+  pubsub: {}
+podAutoscaling:
+  hpaProfile: HPA_PROFILE_UNSPECIFIED
+privateClusterConfig:
+  privateEndpoint: 10.128.0.4
+  publicEndpoint: 34.134.100.6
+rbacBindingConfig:
+  enableInsecureBindingSystemAuthenticated: false
+  enableInsecureBindingSystemUnauthenticated: false
+releaseChannel:
+  channel: REGULAR
+satisfiesPzi: false
+satisfiesPzs: false
+secretManagerConfig:
+  enabled: false
+  rotationConfig:
+    enabled: false
+securityPostureConfig:
+  mode: BASIC
+  vulnerabilityMode: VULNERABILITY_DISABLED
+selfLink: https://container.googleapis.com/v1/projects/imgstorage-1/locations/us-central1/clusters/d2c-cluster
+servicesIpv4Cidr: 34.118.224.0/20
+shieldedNodes:
+  enabled: true
+status: RUNNING
+subnetwork: default
+userManagedKeysConfig: {}
+verticalPodAutoscaling:
+  enabled: true
+workloadIdentityConfig:
+  workloadPool: imgstorage-1.svc.id.goog
+zone: us-central1

@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 
 from rq import Worker
@@ -19,7 +20,8 @@ def main() -> None:
 
     _logger.info("Starting RQ worker for queue: %s", SANDBOX_LIFECYCLE_QUEUE)
 
-    worker = Worker([queue], name=f"worker-{SANDBOX_LIFECYCLE_QUEUE}")
+    hostname = os.environ.get("HOSTNAME", os.urandom(4).hex())
+    worker = Worker([queue], name=f"worker-{SANDBOX_LIFECYCLE_QUEUE}-{hostname}")
 
     try:
         worker.work()

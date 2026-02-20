@@ -6,7 +6,7 @@ metadata:
     app: sandboxes-api
     component: worker
 spec:
-  replicas: 1  # Easily scalable - change this value to scale
+  replicas: 5  # Easily scalable - change this value to scale
   selector:
     matchLabels:
       app: sandboxes-api
@@ -20,7 +20,7 @@ spec:
       serviceAccountName: sandboxes-api
       containers:
       - name: worker
-        image: us-central1-docker.pkg.dev/imgstorage-1/d2c-images/sandboxes-worker:latest
+        image: us-east1-docker.pkg.dev/imgstorage-1/d2c-images/sandboxes-worker:latest
         imagePullPolicy: Always
         envFrom:
         - configMapRef:

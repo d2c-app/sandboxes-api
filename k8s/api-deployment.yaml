@@ -20,7 +20,7 @@ spec:
       serviceAccountName: sandboxes-api
       containers:
       - name: api
-        image: us-central1-docker.pkg.dev/imgstorage-1/d2c-images/sandboxes-api:latest
+        image: us-east1-docker.pkg.dev/imgstorage-1/d2c-images/sandboxes-api:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
