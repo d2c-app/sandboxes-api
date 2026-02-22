@@ -14,6 +14,7 @@ class SandboxClaim:
     id: str
     template: str
     hostname: str
+    pod_ip: str
 
 
 class AgentSandbox:
@@ -76,11 +77,13 @@ class AgentSandbox:
         # The Sandbox controller creates a Service named after the sandbox ID,
         # so use it as the hostname (DNS-resolvable within the cluster).
         hostname = sandbox_id
+        pod_ip = self._get_pod_ip(sandbox_id)
 
         claim = SandboxClaim(
             id=sandbox_id,
             template=template,
             hostname=hostname,
+            pod_ip=pod_ip,
         )
 
         return claim
@@ -94,6 +97,36 @@ class AgentSandbox:
             plural="sandboxclaims",
             name=sandbox_id,
         )
+
+    def _get_pod_ip(self, sandbox_id: str) -> str:
+        """Resolve the Pod IP via the Sandbox's ``agents.x-k8s.io/pod-name`` annotation.
+
+        Bypasses DNS to avoid negative-cache delays on newly-created
+        headless Services.
+        """
+        sandbox = self._custom_api.get_namespaced_custom_object(
+            group="agents.x-k8s.io",
+            version="v1alpha1",
+            namespace=self._namespace,
+            plural="sandboxes",
+            name=sandbox_id,
+        )
+        pod_name = (
+            sandbox.get("metadata", {})
+            .get("annotations", {})
+            .get("agents.x-k8s.io/pod-name")
+        )
+        if not pod_name:
+            raise RuntimeError(
+                f"Sandbox '{sandbox_id}' has no agents.x-k8s.io/pod-name annotation"
+            )
+
+        core_api = client.CoreV1Api()
+        pod = core_api.read_namespaced_pod(name=pod_name, namespace=self._namespace)
+        pod_ip = pod.status.pod_ip
+        if not pod_ip:
+            raise RuntimeError(f"Pod '{pod_name}' has no IP assigned")
+        return pod_ip
 
     def _wait_for_ready(self, sandbox_id: str) -> None:
         """Wait for the SandboxClaim to become Ready."""

@@ -147,7 +147,9 @@ def _create_sandbox_job(
             sandbox_claim.template,
         )
 
-        credentials = _prepare_sandbox(sandbox_type, sandbox_claim.hostname, sandbox_id)
+        credentials = _prepare_sandbox(
+            sandbox_type, sandbox_claim.hostname, sandbox_id, sandbox_claim.pod_ip
+        )
         if credentials:
             _logger.info(
                 "Sandbox preparation completed: sandbox_id=%s, credentials_username=%s",
@@ -180,27 +182,27 @@ def _create_sandbox_job(
 
 
 def _prepare_sandbox(
-    sandbox_type: SandboxType, hostname: str, sandbox_id: str
+    sandbox_type: SandboxType, hostname: str, sandbox_id: str, connect_ip: str
 ) -> DatabaseCredentials | RedisCredentials:
     """
     Prepare a sandbox for use based on its type.
 
     Args:
         sandbox_type: Type of the sandbox
-        hostname: Hostname of the sandbox
+        hostname: Hostname of the sandbox (used in returned credentials)
         sandbox_id: Unique identifier for the sandbox (used as database username)
+        connect_ip: ClusterIP to connect to (bypasses DNS negative-cache delays)
 
     Returns:
-        DatabaseCredentials
+        DatabaseCredentials or RedisCredentials
     """
     if sandbox_type == SandboxType.POSTGRES:
         username = sandbox_id
         password = secrets.token_urlsafe(16)
 
-        # Hardcoded initial credentials - will be adjusted later
-        # Use postgresql+psycopg:// to explicitly use psycopg3 driver
+        # Use the ClusterIP to avoid DNS negative-cache delays on newly-created Services
         initial_connection_string = (
-            f"postgresql+psycopg://postgres:postgres@{hostname}:5432/postgres"
+            f"postgresql+psycopg://postgres:postgres@{connect_ip}:5432/postgres"
         )
 
         # Wait for PostgreSQL to be ready (pod might be Ready but PostgreSQL not accepting connections yet)
@@ -279,7 +281,7 @@ def _prepare_sandbox(
         for attempt in range(max_retries):
             try:
                 client = redis_lib.Redis(
-                    host=hostname, port=6379, socket_connect_timeout=5
+                    host=connect_ip, port=6379, socket_connect_timeout=5
                 )
                 client.ping()
                 break

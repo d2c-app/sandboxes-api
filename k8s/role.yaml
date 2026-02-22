@@ -17,3 +17,17 @@ rules:
   - watch
   - update
   - delete
+# Permissions to read Sandbox objects (resolve pod name from annotation)
+- apiGroups:
+  - "agents.x-k8s.io"
+  resources:
+  - sandboxes
+  verbs:
+  - get
+# Permissions to read Pods (resolve Pod IP for sandbox connectivity)
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
