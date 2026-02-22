@@ -204,8 +204,8 @@ def _prepare_sandbox(
         )
 
         # Wait for PostgreSQL to be ready (pod might be Ready but PostgreSQL not accepting connections yet)
-        max_retries = 10
-        retry_delay = 2  # seconds
+        max_retries = 20
+        retry_delay = 1  # seconds
         engine = None
 
         for attempt in range(max_retries):
@@ -227,9 +227,6 @@ def _prepare_sandbox(
                         retry_delay,
                     )
                     time.sleep(retry_delay)
-                    retry_delay = min(
-                        retry_delay * 1.5, 10
-                    )  # Exponential backoff, max 10s
                 else:
                     raise
 
@@ -275,8 +272,8 @@ def _prepare_sandbox(
         username = sandbox_id
         password = secrets.token_urlsafe(16)
 
-        max_retries = 10
-        retry_delay = 2  # seconds
+        max_retries = 20
+        retry_delay = 0.5  # seconds
         client = None
 
         for attempt in range(max_retries):
@@ -289,14 +286,13 @@ def _prepare_sandbox(
             except (redis_lib.ConnectionError, redis_lib.TimeoutError):
                 if attempt < max_retries - 1:
                     _logger.debug(
-                        "Redis not ready yet (attempt %d/%d): hostname=%s, waiting %ds...",
+                        "Redis not ready yet (attempt %d/%d): hostname=%s, waiting %.1fs...",
                         attempt + 1,
                         max_retries,
                         hostname,
                         retry_delay,
                     )
                     time.sleep(retry_delay)
-                    retry_delay = min(retry_delay * 1.5, 10)
                 else:
                     raise
 
